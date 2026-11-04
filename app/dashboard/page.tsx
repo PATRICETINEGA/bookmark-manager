@@ -3,6 +3,7 @@ import { getSession } from '@/lib/session'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import AddBookmark from '@/components/AddBookmark'
+import DeleteBookmarkButton from '@/components/DeleteBookmarkButton'
 export default async function Dash() {
   const s = await getSession()
   if (!s) redirect('/login')
@@ -17,10 +18,13 @@ export default async function Dash() {
       <AddBookmark />
       <div className="space-y-3">
         {bookmarks.map((b: any) => (
-          <div key={b.id} className="bg-white p-4 rounded shadow">
-            <a href={b.url} target="_blank" rel="noreferrer" className="font-medium text-purple-600 hover:underline">{b.title}</a>
-            <p className="text-sm text-gray-500 mt-1">{b.url}</p>
-            {b.tags && <p className="text-xs text-gray-400 mt-1">{b.tags}</p>}
+          <div key={b.id} className="bg-white p-4 rounded shadow flex justify-between items-start">
+            <div>
+              <a href={b.url} target="_blank" rel="noreferrer" className="font-medium text-purple-600 hover:underline">{b.title}</a>
+              <p className="text-sm text-gray-500 mt-1">{b.url}</p>
+              {b.tags && <p className="text-xs text-gray-400 mt-1">{b.tags}</p>}
+            </div>
+            <DeleteBookmarkButton id={b.id} />
           </div>
         ))}
         {bookmarks.length === 0 && <p className="text-gray-500">No bookmarks yet</p>}
